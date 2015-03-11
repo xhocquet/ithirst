@@ -4,28 +4,29 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+    div.header
+      div.headerlinks
+        div.home.link
+          a Home
+        div.drinks.link
+          a Drinks
+      input.searchbox(id="search" placeholder="Search...")
     div.container
-      div.header
-        div.headerlinks
-          div.home.link
-            a Home
-          div.drinks.link
-            a Drinks
-        input.searchbox(id="search" placeholder="Search...")
       div.content
         h1 Margarita
         div.datacontainer
           div.ingredients
             ul
-              li 1 Part Alcohol
-              li 2 Parts Fun
-              li 3 Parts Drugs
-          #donutchart.chart
+              li.alcoone 1 Part Lime Juice
+              li.alcotwo 2 Parts Triple Sec
+              li.alcothree 3 Parts Tequila
+          canvas.chart(id="ingredientChart")
+        #linebreak
         div.description
           p  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ultrices augue nec ante volutpat, sed vehicula mauris lacinia. In in placerat nibh, sed accumsan erat. Vivamus mollis dui lacus, sed bibendum ex iaculis ut. Curabitur finibus metus pellentesque dolor maximus, ac ultrices urna pulvinar. Donec congue, ligula id tincidunt pellentesque, diam libero mollis mi, non fringilla diam sapien ac enim. Fusce sed sapien quis nisl ullamcorper pretium vitae quis augue. Vestibulum non eros at metus sagittis ornare ac ut orci. Cras laoreet ultricies semper. Fusce eget viverra mi. Nullam porttitor porta felis, sed faucibus leo tempor ac. Donec ut eros nisl. Etiam a iaculis lorem. Praesent porta sit amet dui convallis elementum. Nulla commodo ante a ullamcorper ornare.
           br
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ultrices augue nec ante volutpat, sed vehicula mauris lacinia. In in placerat nibh, sed accumsan erat. Vivamus mollis dui lacus, sed bibendum ex iaculis ut. Curabitur finibus metus pellentesque dolor maximus, ac ultrices urna pulvinar. Donec congue, ligula id tincidunt pellentesque, diam libero mollis mi, non fringilla diam sapien ac enim. Fusce sed sapien quis nisl ullamcorper pretium vitae quis augue. Vestibulum non eros at metus sagittis ornare ac ut orci. Cras laoreet ultricies semper. Fusce eget viverra mi. Nullam porttitor porta felis, sed faucibus leo tempor ac. Donec ut eros nisl. Etiam a iaculis lorem. Praesent porta sit amet dui convallis elementum. Nulla commodo ante a ullamcorper ornare.
   script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
-  script(src='https://www.google.com/jsapi')
+  script(src='/javascripts/chartjs/Chart.js')
   script(src='/javascripts/charts.js')
   script(src='/javascripts/drinks.js')
