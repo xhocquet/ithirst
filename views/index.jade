@@ -1,5 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h1.drinkTitle(id="drinkTitle") iThirst
+  div.datacontainer
+    div.ingredients
+      ul.ingredientlist(id="ingredientlist")
+    canvas.chart(id="ingredientChart")
+  div.description(id="description")
+
+block scripts
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
+  script(src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js')
+  script(src='/javascripts/global.js')
