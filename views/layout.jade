@@ -1,19 +1,23 @@
 doctype html
 html
   head
-    title= iThirst
+    title iThirst - Happy Hour
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     div.header
       div.headerlinks
-        div.home.link
-          a Home
-        div.drinks.link
-          a Drinks
+        div.home.link(id="home")
+          a.headerlinktext(href="/") Home
+        div.drinks.link(id="alldrinks")
+          a.headerlinktext(href="/drinks/list") Drinks
+        div.about.link(id="about")
+          a.headerlinktext(href="/about") About
+        div.adddrink.link(id="adddrink")
+          a.headerlinktext(href="/drinks/add") Add Drink
       div.ui-widget
         input(id="tags" placeholder="Search...")
     div.container
-      div.content
+      div.content(id="content")
         block content
       div.footer Please use and drink responsibly.
   block scripts

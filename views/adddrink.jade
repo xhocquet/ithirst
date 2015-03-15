@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  h1.title(id="title") iThirst
+  div.datacontainer
+    form#formAddDrink(name="adddrink", method="post", action="drinks/add")
+      input#inputName(type="text", placeholder="Drink Name", name="name")
+      br
+      input#inputIngrOne(type="text", placeholder="Ingredient One", name="ingr1")
+      input#inputIngrOneParts(type="text", placeholder="Parts", name="ingr1part")
+      br
+      input#inputIngrTwo(type="text", placeholder="Ingredient Two", name="ingr2")
+      input#inputIngrTwoParts(type="text", placeholder="Parts", name="ingr2part")
+      br
+      input#inputIngrThree(type="text", placeholder="Ingredient Three", name="ingr3")
+      input#inputIngrThreeParts(type="text", placeholder="Parts", name="ingr3part")
+      br
+      input#inputIngrFour(type="text", placeholder="Ingredient Four", name="ingr4")
+      input#inputIngrFourParts(type="text", placeholder="Parts", name="ingr4part")
+      br
+      input#inputDir(type="text", placeholder="Directions", name="directions")
+      button#btnSubmit(type="submit") submit
+
+block scripts
+  script(src='/javascripts/jquery-2.1.3.min.js')
+  script(src='/javascripts/jquery-ui-1.11.4/jquery-ui.min.js')
+  script(src='/javascripts/global.js')

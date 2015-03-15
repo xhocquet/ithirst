@@ -1,10 +1,11 @@
+var availableTags = [];
+
 //DOM Ready
 $(document).ready(function() {
     //Autocomplete on search box
-    var availableTags = [];
     $.getJSON('/drinks/getDrinkNames', function(items) {
         $.each(items, function(index, value) {
-        availableTags.push(capitalize(value.name));
+          availableTags.push(capitalize(value.name));
       });
     });
     
@@ -15,16 +16,47 @@ $(document).ready(function() {
     //Montior search for enter
     $('#tags').keypress(function(e) {
       if (e.keyCode == 13 && document.getElementById('tags').value != '') {
-          loadDrink(document.getElementById('tags').value);
+          window.location.assign('/drinks/find/' + document.getElementById('tags').value);
       }
+    });
+
+    //Navbar stuff
+    $('#home').click(function() {
+      loadHome();
+    });
+
+    $('#about').click(function() {
+      loadAbout();
+    });
+
+    $('#adddrink').click(function() {
+      loadAddDrink();
     });
 });
 
+//Load home page
+function loadHome() {
+  $("#ingredientlist").empty();
+  $("#ingredientChart").hide();
+
+  document.getElementById('title').innerHTML = 'iThirst';
+};
+
+//Load about page
+function loadAbout() {
+  $("#ingredientlist").empty();
+  $("#ingredientChart").hide();
+}
+
+function test() {
+  console.log('testestetst');
+}
+
 //Load page with drink ingredients/chart
 function loadDrink(drinkToGet) {
-console.log('Harvey Wallbanger'.toLowerCase())
 
     $("#ingredientlist").empty();
+     $("#ingredientChart").show();
 
     var address = '/drinks/find/' + drinkToGet.toLowerCase();
     var colors;
@@ -52,11 +84,15 @@ console.log('Harvey Wallbanger'.toLowerCase())
 
     //Populate list with ingredients
     $.getJSON(address, function(item) {
-        document.getElementById('drinkTitle').innerHTML = capitalize(item.name);
+        document.getElementById('title').innerHTML = capitalize(item.name);
         document.getElementById('description').innerHTML = 
           '<hr id="linebreak"><p>' + item.directions + '</p>';
         var ingredients = item.ingredients;
+        var garnishes = item.garnish;
 
+        $("#ingredientlist").append(
+          $('<h3>Ingredients</h3>')
+        );
         //INGREDIENT LOOP
         $.each(ingredients, function(index, value) {
             //Pull the color from the array
@@ -75,6 +111,20 @@ console.log('Harvey Wallbanger'.toLowerCase())
             data.push({'value': value, 'color': curColor, 'label': capitalize(index+'')})
         });
         ///INGREDIENT LOOP END
+        $("#ingredientlist").append(
+          $('<h3>Garnishes</h3>')
+        );
+        //GARNISH LOOP
+        if (garnishes != null) {
+          $.each(garnishes, function(index, value) {
+              $("#ingredientlist").append(
+                $('<li></li>')
+                .text(capitalize(value+''))
+                .css("color", '#d0d0d0')
+              );
+          });
+        };
+        ///GARNISH LOOP END
 
         //CHART
         $.getScript("/javascripts/chartjs/Chart.js", function(){
@@ -88,11 +138,18 @@ console.log('Harvey Wallbanger'.toLowerCase())
     });
 };
 
+//Load inputs to add new drink (AUTH later)
+function loadAddDrink() {
+  document.getElementById('title').innerHTML = 'Add Drinks';
+  $("#ingredientlist").empty();
+  $("#ingredientChart").hide();
+};
+
 //Capitalization helper
 function capitalize(input) {
     var split = input.split(' ');
     for (var i = 0, len = split.length; i < len; i++) {
-        if (split[i].length > 3 || split[i] == 'gin') {
+        if (split[i].length > 3 || split[i] == 'gin' || split[i] == 'old') {
           split[i] = split[i].charAt(0).toUpperCase() + split[i].slice(1);
         }
     }

@@ -27,6 +27,16 @@ body {
 	vertical-align: middle;
 	font-size: 28px;
 	margin: 10px 10px 10px 0;
+	cursor: pointer;
+}
+
+.plainlink {
+	text-decoration: none;
+}
+
+.headerlinktext {
+	text-decoration: none;
+	color: inherit;
 }
 
 .home {
@@ -35,6 +45,14 @@ body {
 
 .drinks {
 	background-color: #df0024;
+}
+
+.about {
+	background-color: #C9BB16;
+}
+
+.adddrink {
+	background-color: #1EC153;
 }
 
 .ui-autocomplete-input {
@@ -105,9 +123,16 @@ h1 {
 	font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
 	font-size: 60px;
 	font-weight: bold;
-	margin: 0;
+	margin: 0 0 30px 0;
 	color: #d0d0d0;
 	text-align: center;
+}
+
+h3 {
+	color: #c9c9c9;
+	text-decoration: underline;
+	font-weight: bold;
+	font-size: 25px;
 }
 
 ul {
@@ -156,4 +181,6 @@ ul {
 	background-color: #0d0d0d;
 	color: #d0d0d0;
 	text-align: center;
+	height: 40px;
+	font-size: 30px;
 }
