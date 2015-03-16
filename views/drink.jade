@@ -1,6 +1,8 @@
 extends layout
 
 block content
+  script(type='text/javascript').
+    var curDrink = "#{name}"
   h1.title(id="title") #{name}
   div.datacontainer
     div.ingredients

@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h1.title(id="title") iThirst
+  h1.title(id="title") #{name}
   div.datacontainer
     form#formAddDrink(name="adddrink", method="post", action="drinks/add")
       input#inputName(type="text", placeholder="Drink Name", name="name")
@@ -22,6 +22,4 @@ block content
       button#btnSubmit(type="submit") submit
 
 block scripts
-  script(src='/javascripts/jquery-2.1.3.min.js')
-  script(src='/javascripts/jquery-ui-1.11.4/jquery-ui.min.js')
-  script(src='/javascripts/global.js')
+  script(src='/javascripts/showDrinkRecipe.js')

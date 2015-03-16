@@ -1,49 +1,22 @@
-var availableTags = [];
-
 //DOM Ready
 $(document).ready(function() {
-    //Autocomplete on search box
-    $.getJSON('/drinks/getDrinkNames', function(items) {
-        $.each(items, function(index, value) {
-          availableTags.push(capitalize(value.name));
-      });
-    });
-    
-    $( "#tags" ).autocomplete({
-      source: availableTags
-    });
+    $("#ingredientlist").empty();
 
-    //Montior search for enter
-    $('#tags').keypress(function(e) {
-      if (e.keyCode == 13 && document.getElementById('tags').value != '') {
-          loadDrink(document.getElementById('tags').value);
-      }
-    });
-
-    loadDrink(document.getElementById('title').innerHTML);
+    loadDrink(curDrink);
 });
 
 //Load page with drink ingredients/chart
 function loadDrink(drinkToGet) {
 
+    var ctx = document.querySelector("canvas").getContext("2d"),
+    grad = ctx.createLinearGradient(0, 0, 0, 150),
+    step = grad.addColorStop.bind(grad), // function reference to simplify
+    dlt = -2, y = 150;
+
     var address = '/drinks/find/details/' + drinkToGet.toLowerCase();
     var colors;
     var curColor;
-    var data = [];
-    var chartOptions = {
-              //Boolean - Whether we should show a stroke on each segment
-              segmentShowStroke : false,
-              //Number - The percentage of the chart that we cut out of the middle
-              percentageInnerCutout : 50, // This is 0 for Pie charts
-              //Number - Amount of animation steps
-              animationSteps : 80,
-              //String - Animation easing effect
-              animationEasing : "easeOutCubic",
-              //Boolean - Whether we animate the rotation of the Doughnut
-              animateRotate : true,
-              //Boolean - Whether we animate scaling the Doughnut from the centre
-              animateScale : false
-            };
+    var prevColor;
 
     //Get array of colors for graph/ingredients
     $.getJSON('/drinks/getColors', function(items) {
@@ -57,10 +30,17 @@ function loadDrink(drinkToGet) {
           '<hr id="linebreak"><p>' + item.directions + '</p>';
         var ingredients = item.ingredients;
         var garnishes = item.garnish;
+        var totalVal = 0;
+        var tempVal = 0;
 
         $("#ingredientlist").append(
           $('<h3>Ingredients</h3>')
         );
+
+        $.each(ingredients, function(index, value) {
+          totalVal += value;
+        });
+
         //INGREDIENT LOOP
         $.each(ingredients, function(index, value) {
             //Pull the color from the array
@@ -75,8 +55,11 @@ function loadDrink(drinkToGet) {
               .text(value + ' parts ' + capitalize(index + ''))
               .css("color", curColor)
             );
+            
+            step(tempVal/totalVal, curColor);
+            tempVal += value;
+            step(tempVal/totalVal, curColor)
 
-            data.push({'value': value, 'color': curColor, 'label': capitalize(index+'')})
         });
         ///INGREDIENT LOOP END
         $("#ingredientlist").append(
@@ -95,10 +78,29 @@ function loadDrink(drinkToGet) {
         ///GARNISH LOOP END
 
         //CHART
-        $.getScript("/javascripts/chartjs/Chart.js", function(){
-          var ctx = document.getElementById("ingredientChart").getContext("2d");
-          var ingredients = new Chart(ctx).Doughnut(data,chartOptions);
-        });
+        // store a triangle path - we'll reuse this for the demo loop
+        ctx.moveTo(75, 0); ctx.lineTo(150, 150); ctx.lineTo(0, 150);
+
+        (function loop() {
+          ctx.globalCompositeOperation = "copy";  // will clear canvas with next draw
+
+          // Fill the previously defined triangle path with any color:
+          ctx.fillStyle = "#000";  // fill some solid color for performance
+          ctx.fill();
+          
+          // draw a rectangle to clip the top using the following comp mode:
+          ctx.globalCompositeOperation = "destination-in";
+          ctx.fillRect(0, y, 150, 150 - y);
+
+          // now that we have the shape we want, just replace it with the gradient:
+          // to do that we use a new comp. mode
+          ctx.globalCompositeOperation = "source-in";
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, 150, 150);
+          
+          y += dlt;
+          requestAnimationFrame(loop);
+        })();
         ///CHART
 
 
