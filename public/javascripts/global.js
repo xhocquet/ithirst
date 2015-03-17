@@ -26,7 +26,7 @@ $(document).ready(function() {
 function capitalize(input) {
     var split = input.split(' ');
     for (var i = 0, len = split.length; i < len; i++) {
-        if (split[i].length > 3 || split[i] == 'gin' || split[i] == 'old') {
+        if (split[i].length > 3 || split[i] == 'gin' || split[i] == 'old' || split[i] == 'dry' || split[i] == 'kir') {
           split[i] = split[i].charAt(0).toUpperCase() + split[i].slice(1);
         }
     }

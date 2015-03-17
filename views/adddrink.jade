@@ -1,25 +1,26 @@
 extends layout
 
 block content
-  h1.title(id="title") #{name}
+  h1.title(id="title") Add drink
   div.datacontainer
-    form#formAddDrink(name="adddrink", method="post", action="drinks/add")
-      input#inputName(type="text", placeholder="Drink Name", name="name")
+    form#formAddDrink.addform(name="adddrink", method="post", action="drinks/add")
+      input#inputName.addinput(type="text", placeholder="Drink Name", name="name")
       br
-      input#inputIngrOne(type="text", placeholder="Ingredient One", name="ingr1")
-      input#inputIngrOneParts(type="text", placeholder="Parts", name="ingr1part")
+      input#inputIngrOne.addinput(type="text", placeholder="Ingredient One", name="ingr1")
+      input#inputIngrOneParts.addinput(type="text", placeholder="Parts", name="ingr1part")
       br
-      input#inputIngrTwo(type="text", placeholder="Ingredient Two", name="ingr2")
-      input#inputIngrTwoParts(type="text", placeholder="Parts", name="ingr2part")
+      input#inputIngrTwo.addinput(type="text", placeholder="Ingredient Two", name="ingr2")
+      input#inputIngrTwoParts.addinput(type="text", placeholder="Parts", name="ingr2part")
       br
-      input#inputIngrThree(type="text", placeholder="Ingredient Three", name="ingr3")
-      input#inputIngrThreeParts(type="text", placeholder="Parts", name="ingr3part")
+      input#inputIngrThree.addinput(type="text", placeholder="Ingredient Three", name="ingr3")
+      input#inputIngrThreeParts.addinput(type="text", placeholder="Parts", name="ingr3part")
       br
-      input#inputIngrFour(type="text", placeholder="Ingredient Four", name="ingr4")
-      input#inputIngrFourParts(type="text", placeholder="Parts", name="ingr4part")
+      input#inputIngrFour.addinput(type="text", placeholder="Ingredient Four", name="ingr4")
+      input#inputIngrFourParts.addinput(type="text", placeholder="Parts", name="ingr4part")
       br
-      input#inputDir(type="text", placeholder="Directions", name="directions")
-      button#btnSubmit(type="submit") submit
+      input#inputDir.addinput(type="text", placeholder="Directions", name="directions")
+      br
+      button#btnSubmit.addsubmit(type="submit") Add Drink
 
 block scripts
-  script(src='/javascripts/showDrinkRecipe.js')
+  script(src='/javascriptS/addDrink')

@@ -1,7 +1,6 @@
 //DOM Ready
 $(document).ready(function() {
     $("#ingredientlist").empty();
-
     loadDrink(curDrink);
 });
 
@@ -56,7 +55,12 @@ function loadDrink(drinkToGet) {
               .css("color", curColor)
             );
             
-            step(tempVal/totalVal, curColor);
+            //Steps for graph gradient
+            //small line
+            step(tempVal/totalVal, "black");
+            step(tempVal/totalVal+.01, "black");
+            //actual alcohol stuff
+            step(tempVal/totalVal+.01, curColor);
             tempVal += value;
             step(tempVal/totalVal, curColor)
 
@@ -79,7 +83,7 @@ function loadDrink(drinkToGet) {
 
         //CHART
         // store a triangle path - we'll reuse this for the demo loop
-        ctx.moveTo(75, 0); ctx.lineTo(150, 150); ctx.lineTo(0, 150);
+        ctx.moveTo(75, 0); ctx.lineTo(75, 150); ctx.lineTo(225, 150); ctx.lineTo(225, 0);
 
         (function loop() {
           ctx.globalCompositeOperation = "copy";  // will clear canvas with next draw
@@ -90,21 +94,18 @@ function loadDrink(drinkToGet) {
           
           // draw a rectangle to clip the top using the following comp mode:
           ctx.globalCompositeOperation = "destination-in";
-          ctx.fillRect(0, y, 150, 150 - y);
+          ctx.fillRect(0, y, 300, 150 - y);
 
           // now that we have the shape we want, just replace it with the gradient:
           // to do that we use a new comp. mode
           ctx.globalCompositeOperation = "source-in";
           ctx.fillStyle = grad;
-          ctx.fillRect(0, 0, 150, 150);
+          ctx.fillRect(0, 0, 300, 150);
           
           y += dlt;
           requestAnimationFrame(loop);
         })();
         ///CHART
-
-
-
     });
 };
 

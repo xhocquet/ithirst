@@ -26,7 +26,7 @@ router.get('/getColors', function (req,res){
 /*GET array of drinks*/
 router.get('/getDrinkNames', function (req,res){
     var db = req.db;
-    db.collection('recipes').find({},{_id: 0, ingredients: 0, directions: 0, garnish: 0}).toArray(function(err, items) {
+    db.collection('recipes').find({},{_id: 0, ingredients: 0, directions: 0, garnish: 0}).sort({name: 1}).toArray(function(err, items) {
     	res.json(items);
     });
 });
@@ -34,9 +34,7 @@ router.get('/getDrinkNames', function (req,res){
 /*GET array of drinks*/
 router.get('/list', function (req,res){
     var db = req.db;
-    db.collection('recipes').find({},{_id: 0, ingredients: 0, directions: 0, garnish: 0}).toArray(function(err, items) {
-        res.render('drinklist', {"drinklist" : items});
-    });
+    res.render('drinklist');
 });
 
 /*GET add drink page*/
