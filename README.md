@@ -7,11 +7,11 @@ db.recipes
 {
 	name 				:	"Drink Name",
 	ingredients : {
-									"Ingredient One" : numParts,
-									"Ingredient Two" : numParts,
-									"Ingredient Two" : numParts,
-									...
-								},
+					"Ingredient One" : numParts,
+					"Ingredient Two" : numParts,
+					"Ingredient Two" : numParts,
+					...
+					},
 	granish			: ["Garnish One", "Garnish Two"],
 	directions	: "Mix the drink and do stuff to it.",
 	glass				: "cocktail|old-fashioned|wine|highball|flute|martini|tumbler",
@@ -22,7 +22,7 @@ db.recipes
 db.colors
 ```
 {
-	name 	: "Ingredient One",
-	color : "#xxxxxx"
+	name		: "Ingredient One",
+	color		: "#xxxxxx"
 }
 ```
