@@ -11,10 +11,10 @@ db.recipes
 					"Ingredient Two" : numParts,
 					"Ingredient Two" : numParts,
 					...
-					},
+				},
 	granish			: ["Garnish One", "Garnish Two"],
-	directions	: "Mix the drink and do stuff to it.",
-	glass				: "cocktail|old-fashioned|wine|highball|flute|martini|tumbler",
+	directions		: "Mix the drink and do stuff to it.",
+	glass			: "cocktail|old-fashioned|wine|highball|flute|martini|tumbler",
 	upvotes			: 0,
 	downvotes		: 0
 }
