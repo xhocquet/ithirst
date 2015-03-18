@@ -3,7 +3,7 @@ extends layout
 block content
   h1.title(id="title") Add drink
   div.datacontainer
-    form#formAddDrink.addform(name="adddrink", method="post", action="drinks/add")
+    form#formAddDrink.addform(name="adddrink", method="post", action="add")
       input#inputName.addinput(type="text", placeholder="Drink Name", name="name")
       br
       input#inputIngrOne.addinput(type="text", placeholder="Ingredient One", name="ingr1")
@@ -23,4 +23,3 @@ block content
       button#btnSubmit.addsubmit(type="submit") Add Drink
 
 block scripts
-  script(src='/javascriptS/addDrink')

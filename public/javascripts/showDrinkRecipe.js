@@ -26,7 +26,7 @@ function loadDrink(drinkToGet) {
     $.getJSON(address, function(item) {
         document.getElementById('title').innerHTML = capitalize(item.name);
         document.getElementById('description').innerHTML = 
-          '<hr id="linebreak"><p>' + item.directions + '</p>';
+          '<p>' + item.directions + '</p>';
         var ingredients = item.ingredients;
         var garnishes = item.garnish;
         var totalVal = 0;

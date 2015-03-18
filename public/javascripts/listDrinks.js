@@ -8,7 +8,7 @@ function loadDrinkList() {
 	$.getJSON('/drinks/getDrinkNames', function(items) {
     $.each(items, function(index, value) {
       $("#drinklist").append(
-        $('<a></a><br />')
+        $('<a class="drinklistitem"></a><br />')
         .text(capitalize(value.name+''))
         .css("color", '#d0d0d0')
         .attr("href", "/drinks/find/"+value.name)
