@@ -25,8 +25,7 @@ function loadDrink(drinkToGet) {
     //Populate list with ingredients
     $.getJSON(address, function(item) {
         document.getElementById('title').innerHTML = capitalize(item.name);
-        document.getElementById('description').innerHTML = 
-          '<p>' + item.directions + '</p>';
+        $('#description').append('<p>' + item.directions + '</p>');
         var ingredients = item.ingredients;
         var garnishes = item.garnish;
         var totalVal = 0;
@@ -66,11 +65,13 @@ function loadDrink(drinkToGet) {
 
         });
         ///INGREDIENT LOOP END
-        $("#ingredientlist").append(
-          $('<h3>Garnishes</h3>')
-        );
+        
         //GARNISH LOOP
-        if (garnishes != null) {
+        if (garnishes != null && garnishes.length > 0) {
+          $("#ingredientlist").append(
+            $('<h3>Garnishes</h3>')
+          );
+
           $.each(garnishes, function(index, value) {
               $("#ingredientlist").append(
                 $('<li></li>')

@@ -23,6 +23,13 @@ router.get('/getColors', function (req,res){
     });
 });
 
+router.get('/getIngredients', function (req,res) {
+    var db = req.db;
+    db.collection('colors').find({},{_id: 0,color: 0}).toArray(function (err, items) {
+        res.json(items);
+    });
+});
+
 /*GET array of drinks*/
 router.get('/getDrinkNames', function (req,res){
     var db = req.db;
@@ -47,30 +54,40 @@ router.post('/add', function (req, res) {
     var db = req.db;
 
     var tempJSONString = '{"name": "';
-
     tempJSONString += req.body.name;
     tempJSONString += '","ingredients": {';
-
     if (req.body.ingr1 != '') {
         tempJSONString += '"';
         tempJSONString += req.body.ingr1;
         tempJSONString += '": "';
         tempJSONString += req.body.ingr1part;
-        tempJSONString +='", '
+        if (req.body.ingr2 != '') {
+            tempJSONString +='", '
+        } else {
+            tempJSONString +='"'
+        }
     }
     if (req.body.ingr2 != '') {
         tempJSONString += '"';
         tempJSONString += req.body.ingr2;
         tempJSONString += '": "';
         tempJSONString += req.body.ingr2part;
-        tempJSONString +='", '
+        if (req.body.ingr3 != '') {
+            tempJSONString +='", '
+        } else {
+            tempJSONString +='"'
+        }
     }
     if (req.body.ingr3 != '') {
         tempJSONString += '"';
         tempJSONString += req.body.ingr3;
         tempJSONString += '": "';
         tempJSONString += req.body.ingr3part;
-        tempJSONString +='" '
+        if (req.body.ingr4 != '') {
+            tempJSONString +='", '
+        } else {
+            tempJSONString +='"'
+        }
     }
     if (req.body.ingr4 != '') {
         tempJSONString += '"';
@@ -78,13 +95,37 @@ router.post('/add', function (req, res) {
         tempJSONString += '": "';
         tempJSONString += req.body.ingr4part;
         tempJSONString +='"'
+        if (req.body.ingr5 != '') {
+            tempJSONString +='", '
+        } else {
+            tempJSONString +='"'
+        }
     }
-
-    tempJSONString += '}, "garnish": [], "directions": "shake and strain", "upvotes": 0, "downvotes": 0}';
-    console.log(tempJSONString);
+    if (req.body.ingr5 != '') {
+        tempJSONString += '"';
+        tempJSONString += req.body.ingr5;
+        tempJSONString += '": "';
+        tempJSONString += req.body.ingr5part;
+        tempJSONString +='"'
+    }
+    tempJSONString += '}, "garnish": ["'
+    if (req.body.garnish1 != ''){
+        tempJSONString += req.body.garnish1;
+        if (req.body.garnish2 != '') {
+            tempJSONString += '", "'
+        }
+    }
+    if (req.body.garnish2 != ''){
+        tempJSONString += req.body.garnish2;
+    }
+    tempJSONString += '"], "directions": "';
+    tempJSONString += req.body.directions;
+    tempJSONString += '", "glass": "';
+    tempJSONString += req.body.glass;
+    tempJSONString += '", "upvotes": 0, "downvotes": 0}';
     var JSONObj = JSON.parse(tempJSONString);
 
-
+    console.log(JSONObj);
 
     db.collection('recipes').insert(JSONObj, function (err, doc) {
         if (err) {

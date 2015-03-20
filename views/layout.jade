@@ -18,11 +18,10 @@ html
           a.headerlinktext(href="/drinks/add") Add Drink
         div.addcolor.link(id="addcolor")
           a.headerlinktext(href="/drinks/addColor") Add Color
-      div.ui-widget
+      div.navsearch(id="navsearch")
         input(id="tags" placeholder="Search...")
     div.container
-      div.content(id="content")
-        block content
-      div.footer Please use and drink responsibly.
-    script(src='/javascripts/global.js')
+      block content
+    div.footer Please use and drink responsibly.
+  script(src='/javascripts/global.js')
   block scripts

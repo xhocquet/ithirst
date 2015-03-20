@@ -2,13 +2,11 @@ extends layout
 
 block content
   h1.title(id="title") iThirst
-  div.datacontainer
-    div.ingredients
-      ul.ingredientlist(id="ingredientlist")
-    canvas.chart(id="ingredientChart")
-  div.description(id="description")
+  h2 What's in stock?
+  div.searcharea(id="searcharea")
+    input(id="ingredients" placeholder="Search...")
+    a +
+  div.ingredientshelf
 
 block scripts
-  script(src='/javascripts/jquery-2.1.3.min.js')
-  script(src='/javascripts/jquery-ui-1.11.4/jquery-ui.min.js')
-  script(src='/javascripts/global.js')
+  script(src='/javascripts/mainSearch.js')

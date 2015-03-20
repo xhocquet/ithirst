@@ -5,18 +5,32 @@ block content
   div.datacontainer
     form#formAddDrink.addform(name="adddrink", method="post", action="add")
       input#inputName.addinput(type="text", placeholder="Drink Name", name="name")
+      select#inputGlass.addselect(name="glass")
+        option(value="flute") Champagne Flute
+        option(value="cocktail") Cocktail Glass
+        option(value="highball") Highball
+        option(value="martini") Martini Glass
+        option(value="old-fashioned") Old Fashioned
+        option(value="tumbler") Tumbler
+        option(value="wine") Wine Glass
       br
       input#inputIngrOne.addinput(type="text", placeholder="Ingredient One", name="ingr1")
-      input#inputIngrOneParts.addinput(type="text", placeholder="Parts", name="ingr1part")
+      input#inputIngrOneParts.addinputshort(type="text", placeholder="Parts", name="ingr1part")
       br
       input#inputIngrTwo.addinput(type="text", placeholder="Ingredient Two", name="ingr2")
-      input#inputIngrTwoParts.addinput(type="text", placeholder="Parts", name="ingr2part")
+      input#inputIngrTwoParts.addinputshort(type="text", placeholder="Parts", name="ingr2part")
       br
       input#inputIngrThree.addinput(type="text", placeholder="Ingredient Three", name="ingr3")
-      input#inputIngrThreeParts.addinput(type="text", placeholder="Parts", name="ingr3part")
+      input#inputIngrThreeParts.addinputshort(type="text", placeholder="Parts", name="ingr3part")
       br
       input#inputIngrFour.addinput(type="text", placeholder="Ingredient Four", name="ingr4")
-      input#inputIngrFourParts.addinput(type="text", placeholder="Parts", name="ingr4part")
+      input#inputIngrFourParts.addinputshort(type="text", placeholder="Parts", name="ingr4part")
+      br
+      input#inputIngrFive.addinput(type="text", placeholder="Ingredient Five", name="ingr5")
+      input#inputIngrFiveParts.addinputshort(type="text", placeholder="Parts", name="ingr5part")
+      br
+      input#inputGarnish.addinput(type="text", placeholder="Garnish One", name="garnish1")
+      input#inputGarnish.addinput(type="text", placeholder="Garnish Two", name="garnish2")
       br
       input#inputDir.addinput(type="text", placeholder="Directions", name="directions")
       br
