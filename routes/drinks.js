@@ -9,8 +9,7 @@ router.get('/find/:name', function (req,res){
 
 router.get('/find/details/:name', function (req,res){
     var db = req.db;
-    var drinkName = req.params.name;
-    db.collection('recipes').findOne({name: drinkName}, function (err, result) {
+    db.collection('recipes').findOne({name: req.params.name}, function (err, result) {
         res.send(result);
     });
 });
@@ -38,6 +37,14 @@ router.get('/getDrinkNames', function (req,res){
     });
 });
 
+router.get('/getDrinksByIngredients/:ingredients', function(req, res){
+    var ingredientArray = req.params.ingredients.split(",");
+    var db = req.db;
+    db.collection('recipes').find({"ingredients.name": {$in: ingredientArray }}).toArray(function(err, items){
+        res.json(items);
+    });
+});
+
 /*GET array of drinks*/
 router.get('/list', function (req,res){
     var db = req.db;
@@ -55,60 +62,62 @@ router.post('/add', function (req, res) {
 
     var tempJSONString = '{"name": "';
     tempJSONString += req.body.name;
-    tempJSONString += '","ingredients": {';
+    tempJSONString += '","ingredients": [';
+    
     if (req.body.ingr1 != '') {
-        tempJSONString += '"';
+        tempJSONString += '{"name":"';
         tempJSONString += req.body.ingr1;
-        tempJSONString += '": "';
+        tempJSONString += '", "amount": ';
         tempJSONString += req.body.ingr1part;
         if (req.body.ingr2 != '') {
-            tempJSONString +='", '
+            tempJSONString +='}, '
         } else {
-            tempJSONString +='"'
+            tempJSONString +='}'
         }
     }
     if (req.body.ingr2 != '') {
-        tempJSONString += '"';
+        tempJSONString += '{"name":"';
         tempJSONString += req.body.ingr2;
-        tempJSONString += '": "';
+        tempJSONString += '", "amount": ';
         tempJSONString += req.body.ingr2part;
         if (req.body.ingr3 != '') {
-            tempJSONString +='", '
+            tempJSONString +='}, '
         } else {
-            tempJSONString +='"'
+            tempJSONString +='}'
         }
     }
     if (req.body.ingr3 != '') {
-        tempJSONString += '"';
+        tempJSONString += '{"name":"';
         tempJSONString += req.body.ingr3;
-        tempJSONString += '": "';
+        tempJSONString += '", "amount": ';
         tempJSONString += req.body.ingr3part;
         if (req.body.ingr4 != '') {
-            tempJSONString +='", '
+            tempJSONString +='}, '
         } else {
-            tempJSONString +='"'
+            tempJSONString +='}'
         }
     }
     if (req.body.ingr4 != '') {
-        tempJSONString += '"';
+        tempJSONString += '{"name":"';
         tempJSONString += req.body.ingr4;
-        tempJSONString += '": "';
+        tempJSONString += '", "amount": ';
         tempJSONString += req.body.ingr4part;
-        tempJSONString +='"'
         if (req.body.ingr5 != '') {
-            tempJSONString +='", '
+            tempJSONString +='}, '
         } else {
-            tempJSONString +='"'
+            tempJSONString +='}'
         }
     }
     if (req.body.ingr5 != '') {
-        tempJSONString += '"';
+        tempJSONString += '{"name":"';
         tempJSONString += req.body.ingr5;
-        tempJSONString += '": "';
+        tempJSONString += '", "amount": ';
         tempJSONString += req.body.ingr5part;
-        tempJSONString +='"'
+        tempJSONString +='}'
     }
-    tempJSONString += '}, "garnish": ["'
+
+    tempJSONString += '], "garnish": ["'
+
     if (req.body.garnish1 != ''){
         tempJSONString += req.body.garnish1;
         if (req.body.garnish2 != '') {
@@ -123,6 +132,7 @@ router.post('/add', function (req, res) {
     tempJSONString += '", "glass": "';
     tempJSONString += req.body.glass;
     tempJSONString += '", "upvotes": 0, "downvotes": 0}';
+    console.log(tempJSONString)
     var JSONObj = JSON.parse(tempJSONString);
 
     console.log(JSONObj);

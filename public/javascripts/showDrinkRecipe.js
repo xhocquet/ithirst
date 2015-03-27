@@ -36,21 +36,21 @@ function loadDrink(drinkToGet) {
         );
 
         $.each(ingredients, function(index, value) {
-          totalVal += value;
+          totalVal += value.amount;
         });
 
         //INGREDIENT LOOP
         $.each(ingredients, function(index, value) {
             //Pull the color from the array
             $.each(colors, function(index2, value2) {
-                if (index == value2.name) {
+                if (value.name == value2.name) {
                     curColor = value2.color;
                 }
             });
 
             $("#ingredientlist").append(
               $('<li></li>')
-              .text(value + ' parts ' + capitalize(index + ''))
+              .text(value.amount + ' parts ' + capitalize(value.name + ''))
               .css("color", curColor)
             );
             
@@ -60,7 +60,7 @@ function loadDrink(drinkToGet) {
             step(tempVal/totalVal+.01, "black");
             //actual alcohol stuff
             step(tempVal/totalVal+.01, curColor);
-            tempVal += value;
+            tempVal += value.amount;
             step(tempVal/totalVal, curColor)
 
         });

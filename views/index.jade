@@ -5,8 +5,11 @@ block content
   h2 What's in stock?
   div.searcharea(id="searcharea")
     input(id="ingredients" placeholder="Search...")
-    a +
-  div.ingredientshelf
+    a.addingredient(id="addingredient") +
+  div.ingredientshelf(id="ingredientshelf")
+    div.searchbutton(id="searchbutton") Find Drinks
+  p.indexdirections Click an ingredient to remove it.
+  div.availabledrinks(id="availabledrinks")
 
 block scripts
   script(src='/javascripts/mainSearch.js')
