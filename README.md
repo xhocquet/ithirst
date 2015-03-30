@@ -11,15 +11,16 @@ db.recipes
 ```
 {
 	name		:	"Drink Name",
-	ingredients : {
-		"Ingredient One" : numParts,
-		"Ingredient Two" : numParts,
-		"Ingredient Two" : numParts,
+	ingredients : [
+		{"name": "Ingredient One", "amount": numParts},
+		{"name": "Ingredient Two", "amount": numParts},
+		{"name": "Ingredient Two", "amount": numParts},
 		...
-	},
+	],
 	granish		: ["Garnish One", "Garnish Two"],
 	directions	: "Mix the drink and do stuff to it.",
-	glass		: "cocktail|old-fashioned|wine|highball|flute|martini|tumbler",
+	glass		: "glassType",
+	type		: "drinkType",
 	upvotes		: 0,
 	downvotes	: 0
 }
