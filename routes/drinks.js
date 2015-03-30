@@ -2,9 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/find/:name', function (req,res){
-    var db = req.db;
     var drinkName = req.params.name;
-        res.render('drink', {name: drinkName});
+    res.render('drink', {name: drinkName});
 });
 
 router.get('/find/details/:name', function (req,res){
@@ -19,6 +18,14 @@ router.get('/getColors', function (req,res){
     var db = req.db;
     db.collection('colors').find().toArray(function(err, items) {
     	res.json(items);
+    });
+});
+
+/*GET colors that are set to #123456*/
+router.get('/getEmptyColors', function (req,res){
+    var db = req.db;
+    db.collection('colors').find({"color":"#123456"}).limit(20).toArray(function(err, items) {
+        res.json(items);
     });
 });
 
@@ -45,16 +52,52 @@ router.get('/getDrinksByIngredients/:ingredients', function(req, res){
     });
 });
 
-/*GET array of drinks*/
+/*GET open drink list*/
 router.get('/list', function (req,res){
-    var db = req.db;
     res.render('drinklist');
+});
+
+/*GET display empty colors*/
+router.get('/fixcolors', function (req,res){
+    res.render('emptycolors');
 });
 
 /*GET add drink page*/
 router.get('/add', function (req, res) {
     res.render('adddrink');
 });
+
+router.get('/changeColor/:alcohol/:color', function(req,res){
+    res.render('emptycolors');
+})
+
+/*POST color change*/
+router.post('/changeColor/:alcohol/:color', function (req,res) {
+    var db = req.db;
+    var alcoholName = req.params.alcohol;
+    var newColor = req.params.color;
+
+    db.collection('colors').update(
+        {"name":alcoholName},
+        { $set:
+            {
+                "color":"#"+newColor
+            }
+        }
+    , function (err, doc) {
+        if (err) {
+            // If it failed, return error
+            console.log(err)
+            res.send("Updating color failed");
+        }
+        else {
+            // If it worked, set the header so the address bar doesn't still say /adduser
+            //res.location("../../drinks/list");
+            // And forward to success page
+            //res.redirect("../../drinks/list");
+        }
+    })
+})
 
 /*POST add new drink*/
 router.post('/add', function (req, res) {
