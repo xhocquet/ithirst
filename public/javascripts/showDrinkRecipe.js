@@ -1,3 +1,10 @@
+unitModifers = {
+  'oz' : 30,
+  'gallon' : 3785,
+  'quart' : 946,
+  'pinch' : 0.5,
+}
+
 //DOM Ready
 $(document).ready(function() {
     $("#ingredientlist").empty();
@@ -50,10 +57,10 @@ function loadDrink(drinkToGet) {
 
             $("#ingredientlist").append(
               $('<li></li>')
-              .text(value.amount + ' parts ' + capitalize(value.name + ''))
+              .text(value.amount + ' ' + capitalize(value.name + ''))
               .css("color", curColor)
             );
-            
+
             //Steps for graph gradient
             //small line
             step(tempVal/totalVal, "black");
@@ -65,7 +72,7 @@ function loadDrink(drinkToGet) {
 
         });
         ///INGREDIENT LOOP END
-        
+
         //GARNISH LOOP
         if (garnishes != null && garnishes.length > 0) {
           $("#ingredientlist").append(
@@ -92,7 +99,7 @@ function loadDrink(drinkToGet) {
           // Fill the previously defined triangle path with any color:
           ctx.fillStyle = "#000";  // fill some solid color for performance
           ctx.fill();
-          
+
           // draw a rectangle to clip the top using the following comp mode:
           ctx.globalCompositeOperation = "destination-in";
           ctx.fillRect(0, y, 300, 150 - y);
@@ -102,7 +109,7 @@ function loadDrink(drinkToGet) {
           ctx.globalCompositeOperation = "source-in";
           ctx.fillStyle = grad;
           ctx.fillRect(0, 0, 300, 150);
-          
+
           y += dlt;
           requestAnimationFrame(loop);
         })();
@@ -119,4 +126,10 @@ function capitalize(input) {
         }
     }
     return split.join(' ');
+}
+
+//Map units to a modifier for consistent #s for chart
+//Loosely based off of ML, might need to adjust
+function mapUnit(unitString) {
+
 }
