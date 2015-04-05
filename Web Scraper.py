@@ -16,7 +16,7 @@ def populate():
 	recipeString = '['
 	colorString = '['
 
-	for x in range(1,1000):
+	for x in range(1,50):
 		request = requests.get("http://www.barmeister.com/drinks/recipe/"+str(x)+"/")
 		soup = BeautifulSoup(request.text)
 		
@@ -67,8 +67,8 @@ def populate():
 	recipeString += ']'
 	colorString += ']'
 
-	recipeJsonObject = ast.literal_eval(recipeString).strip()
-	colorJsonObject = ast.literal_eval(colorString).strip()
+	recipeJsonObject = ast.literal_eval(recipeString)
+	colorJsonObject = ast.literal_eval(colorString)
 	print('Completed scan')
 
 	try:

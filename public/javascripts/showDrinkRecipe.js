@@ -59,9 +59,9 @@ function loadDrink(drinkToGet) {
             step(tempVal/totalVal, "black");
             step(tempVal/totalVal+.01, "black");
             //actual alcohol stuff
-            step(tempVal/totalVal+.01, curColor);
-            tempVal += value.amount;
-            step(tempVal/totalVal, curColor)
+            // step(tempVal/totalVal+.01, curColor);
+            // tempVal += value.amount;
+            // step(tempVal/totalVal, curColor)
 
         });
         ///INGREDIENT LOOP END
