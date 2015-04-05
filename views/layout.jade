@@ -1,0 +1,27 @@
+doctype html
+html
+  head
+    title iThirst - Happy Hour
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/javascripts/jquery-2.1.3.min.js')
+    script(src='/javascripts/jquery-ui-1.11.4/jquery-ui.min.js')
+  body
+    div.header
+      div.headerlinks
+        div.home.link(id="home")
+          a.headerlinktext(href="/") Home
+        div.drinks.link(id="alldrinks")
+          a.headerlinktext(href="/drinks/list") Drinks
+        div.about.link(id="about")
+          a.headerlinktext(href="/about") About
+        div.adddrink.link(id="adddrink")
+          a.headerlinktext(href="/drinks/add") Add Drink
+        div.addcolor.link(id="addcolor")
+          a.headerlinktext(href="/drinks/fixcolors") Colors
+      div.navsearch(id="navsearch")
+        input(id="tags" placeholder="Search...")
+    div.container
+      block content
+    div.footer Please use and drink responsibly.
+  script(src='/javascripts/global.js')
+  block scripts
