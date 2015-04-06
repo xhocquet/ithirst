@@ -2,21 +2,23 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/find/:name', function (req,res){
-    var drinkName = req.params.name;
+    var drinkName = decodeURI(req.params.name);
     res.render('drink', {name: drinkName});
 });
 
 router.get('/find/details/:name', function (req,res){
     var db = req.db;
-    db.collection('recipes').findOne({name: req.params.name}, function (err, result) {
+    nameToSearch = decodeURI(req.params.name);
+    db.collection('recipes').findOne({"name": nameToSearch}, function (err, result) {
         res.send(result);
     });
 });
 
 /*GET array of colors*/
-router.get('/getColors', function (req,res){
+router.get('/getColors/:ingredients', function (req,res){
+    var ingredientArray = req.params.ingredients.split(",");
     var db = req.db;
-    db.collection('colors').find().toArray(function(err, items) {
+    db.collection('colors').find({"name": {$in: ingredientArray }}).toArray(function(err, items) {
     	res.json(items);
     });
 });

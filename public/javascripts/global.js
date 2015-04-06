@@ -16,9 +16,9 @@ $(document).ready(function() {
 
     //Montior search for enter
     $('#tags').keypress(function(e) {
-      curString = document.getElementById('tags').value;
+      curString = document.getElementById('tags').value.toLowerCase();
       if (e.keyCode == 13 && curString != '') {
-          window.location.assign('/drinks/find/' + curString);
+          window.location.assign('/drinks/find/' + encodeURI(curString));
       }
     });
 });
@@ -32,4 +32,4 @@ function capitalize(input) {
         }
     }
     return split.join(' ');
-}
+};

@@ -71,7 +71,7 @@ def populate():
 
 				recipeString += curAmount
 				recipeString += '","measure":"'
-				recipeString += curMeasure
+				recipeString += re.sub("[^a-zA-Z]","", curMeasure)
 				recipeString += '"},'
 
 			recipeString += '],"directions":"'
