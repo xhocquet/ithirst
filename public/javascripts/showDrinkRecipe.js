@@ -42,10 +42,21 @@ function loadDrink(drinkToGet) {
     $.getJSON(address, function(item) {
         curGlassType = item.glass;
 
-      ctx = document.querySelector("canvas").getContext("2d"),
-      grad = ctx.createLinearGradient(0, 0, 0, 150),
-      step = grad.addColorStop.bind(grad), // function reference to simplify
-      dlt = -2, y = 150;
+        ctx = document.querySelector("canvas").getContext("2d");
+        if (curGlassType == 'highball glass') {
+            grad = ctx.createLinearGradient(0, 0, 0, 150)
+        } else if (curGlassType == 'shooter glass' || curGlassType == 'shot glass') {
+            grad = ctx.createLinearGradient(0, 70, 0, 150);
+        }
+
+        step = grad.addColorStop.bind(grad), // function reference to simplify
+            dlt = -2;
+
+        if (curGlassType == 'highball glass') {
+            y = 150;
+        } else if (curGlassType == 'shooter glass' || curGlassType == 'shot glass') {
+            y = 80;
+        }
 
         document.getElementById('title').innerHTML = capitalize(item.name);
         $('#description').append('<p>' + item.directions + '</p>');
@@ -54,100 +65,150 @@ function loadDrink(drinkToGet) {
         tempVal = 0;
 
         $("#ingredientlist").append(
-          $('<h3>Ingredients</h3>')
+            $('<h3>Ingredients</h3>')
         );
 
         $.each(ingredients, function(index, value) {
-          modifier = mapUnit(value.measure);
-          totalVal += value.amount * modifier;
-          colors.push(value.name);
+            modifier = mapUnit(value.measure);
+            tempNum = Number(value.amount)
+            if (isNaN(tempNum)) {
+                if (hasFraction = parseFrac(value.amount)) {
+                    tempNum = hasFraction
+                }
+            }
+            totalVal += tempNum * modifier;
+            colors.push(value.name);
         });
 
         //Get array of colors for graph/ingredients
         parsedColors = colors.join();
         $.get('/drinks/getColors/' + parsedColors, function(items) {
-            $.each(items, function(index,value){
-              colorInfo.push(value);
+            $.each(items, function(index, value) {
+                colorInfo.push(value);
             })
 
             //INGREDIENT LOOP
-        $.each(ingredients, function(index, value) {
-            modifier = mapUnit(value.measure);
-            //Pull the color from the array
-            curColor = "black"
-            $.each(colorInfo, function(index2, value2) {
-                if (value.name == value2.name) {
-                    curColor = value2.color;
+            $.each(ingredients, function(index, value) {
+                modifier = mapUnit(value.measure);
+                //Pull the color from the array
+                curColor = "black"
+                $.each(colorInfo, function(index2, value2) {
+                    if (value.name == value2.name) {
+                        curColor = value2.color;
+                    }
+                });
+
+                $("#ingredientlist").append(
+                    $('<li></li>')
+                    .text(value.amount + ' ' + value.measure + ' ' + capitalize(value.name + ''))
+                    .css("color", curColor)
+                );
+
+                //Steps for graph gradient
+                //small line
+                step(tempVal / totalVal, "black");
+                step(tempVal / totalVal + .01, "black");
+                //actual alcohol stuff
+                step(tempVal / totalVal + .01, curColor);
+
+                tempNum = Number(value.amount)
+                if (isNaN(tempNum)) {
+                    if (hasFraction = parseFrac(value.amount)) {
+                        tempNum = hasFraction
+                    }
                 }
+
+                tempVal += tempNum * modifier;
+
+                step(tempVal / totalVal, curColor)
+
             });
+            ///INGREDIENT LOOP END
 
-            $("#ingredientlist").append(
-              $('<li></li>')
-              .text(value.amount + ' ' + value.measure + ' ' + capitalize(value.name + ''))
-              .css("color", curColor)
-            );
+            //CHART
+            //Shape of glass depending on glasstype
+            if (curGlassType == 'highball glass') {
+                ctx.moveTo(75, 0);
+                ctx.lineTo(75, 150);
+                ctx.lineTo(200, 150);
+                ctx.lineTo(200, 0);
+            } else if (curGlassType == 'shooter glass' || curGlassType == 'shot glass') {
+                ctx.moveTo(75, 70);
+                ctx.lineTo(75, 150);
+                ctx.lineTo(140, 150);
+                ctx.lineTo(140, 70);
+            }
 
-            //Steps for graph gradient
-            //small line
-            step(tempVal/totalVal, "black");
-            step(tempVal/totalVal+.01, "black");
-            //actual alcohol stuff
-            step(tempVal/totalVal+.01, curColor);
-            tempVal += value.amount * modifier;
-            step(tempVal/totalVal, curColor)
+            (function loop() {
+                ctx.globalCompositeOperation = "copy"; // will clear canvas with next draw
+
+                // Fill the previously defined triangle path with any color:
+                ctx.fillStyle = "#bfbfbf"; // fill some solid color for performance
+                ctx.fill();
+
+                // draw a rectangle to clip the top using the following comp mode:
+                ctx.globalCompositeOperation = "destination-in";
+                if (curGlassType == 'highball glass') {
+                    ctx.fillRect(0, y, 300, 150 - y);
+                } else if (curGlassType == 'shooter glass' || curGlassType == 'shot glass') {
+                    ctx.fillRect(0, y, 300, 150 - y);
+                }
+
+                // now that we have the shape we want, just replace it with the gradient:
+                // to do that we use a new comp. mode
+                ctx.globalCompositeOperation = "source-in";
+                ctx.fillStyle = grad;
+                if (curGlassType == 'highball glass') {
+                    ctx.fillRect(0, 0, 300, 150);
+                } else if (curGlassType == 'shooter glass' || curGlassType == 'shot glass') {
+                    ctx.fillRect(0, 70, 300, 150);
+                }
+
+                ctx.globalCompositeOperation = "source-over";
+                ctx.beginPath();
+                if (curGlassType == 'highball glass') {
+                    ctx.moveTo(75, 0);
+                    ctx.lineTo(75, 150);
+                    ctx.lineTo(200, 150);
+                    ctx.lineTo(200, 0);
+                } else if (curGlassType == 'shooter glass' || curGlassType == 'shot glass') {
+                    ctx.moveTo(75, 70);
+                    ctx.lineTo(75, 150);
+                    ctx.lineTo(140, 150);
+                    ctx.lineTo(140, 70);
+                }
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = '#bfbfbf';
+                ctx.stroke();
+
+                y += dlt;
+                requestAnimationFrame(loop);
+            })();
+            ///CHART
 
         });
-        ///INGREDIENT LOOP END
 
-        //CHART
-        //Shape of glass depending on glasstype
-        if(curGlassType == 'highball glass') {
-          ctx.moveTo(75, 0); ctx.lineTo(75, 150); ctx.lineTo(225, 150); ctx.lineTo(225, 0);
-        }
 
-        (function loop() {
-          ctx.globalCompositeOperation = "copy";  // will clear canvas with next draw
-
-          // Fill the previously defined triangle path with any color:
-          ctx.fillStyle = "#bfbfbf";  // fill some solid color for performance
-          ctx.fill();
-
-          // draw a rectangle to clip the top using the following comp mode:
-          ctx.globalCompositeOperation = "destination-in";
-          ctx.fillRect(0, y, 300, 150 - y);
-
-          // now that we have the shape we want, just replace it with the gradient:
-          // to do that we use a new comp. mode
-          ctx.globalCompositeOperation = "source-in";
-          ctx.fillStyle = grad;
-          ctx.fillRect(0, 0, 300, 150);
-
-          ctx.globalCompositeOperation = "source-over";
-          ctx.beginPath();
-          ctx.moveTo(75, 0); ctx.lineTo(75, 150); ctx.lineTo(225, 150); ctx.lineTo(225, 0);
-          ctx.lineWidth = 5;
-          ctx.strokeStyle = '#bfbfbf';
-          ctx.stroke();
-
-          y += dlt;
-          requestAnimationFrame(loop);
-        })();
-                ///CHART
-
-        });
-
-        
     });
 };
 
-
+//Parses fractions into floats for chart
 function parseFrac(frac) {
- frac = frac.split(/ ?(\d+)\/(\d+)/);
- if(!isNaN(parseInt(frac[2])))
-   return Math.round(frac[0] * 1 + frac[1] / frac[2], 3);
- else
-   return false;
-};
+ var y = frac.split(' ');
+  if(y.length > 1){
+      var z = y[1].split('/');
+      return (+y[0] + (z[0] / z[1]));
+  }
+  else{
+      var z = y[0].split('/');
+      if(z.length > 1){
+          return(z[0] / z[1]);
+      }
+      else{
+          return(z[0]);
+      }
+  }
+}
 
 //Map units to a modifier for consistent #s for chart
 //Loosely based off of ML, might need to adjust
