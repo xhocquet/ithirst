@@ -14,18 +14,16 @@ def cutit(s,n):
    return s[n:]
 
 def populate():
-	recipeString = '['
-	colorString = '['
+	for x in range(6000,8000):
+		recipeString = '['
+		colorString = '['
 
-	for x in range(1,50):
 		request = requests.get("http://www.barmeister.com/drinks/recipe/"+str(x)+"/")
 		soup = BeautifulSoup(request.text)
 
 		drinkName = soup.find('span', class_='title_text').text
 
-		print('#'+str(x)+' ====== '+drinkName+' =======')
-
-		if len(drinkName) > 17:
+		if (len(drinkName) > 17):
 			recipeString += '{"name":"'
 			recipeString += cutit(drinkName,17).lower().strip()
 			recipeString += '","ingredients":['
@@ -82,22 +80,28 @@ def populate():
 			recipeString += drinkType.lower().strip()
 			recipeString += '","upvotes":0,"downvotes":0},'
 
-	recipeString += ']'
-	colorString += ']'
+			recipeString += ']'
+			colorString += ']'
 
-	recipeJsonObject = ast.literal_eval(recipeString)
-	colorJsonObject = ast.literal_eval(colorString)
-	print('Completed scan')
+			try:
+				recipeJsonObject = ast.literal_eval(recipeString.strip())
+				try:
+					recipes.insert(recipeJsonObject,continue_on_error=True)
+				except pymongo.errors.DuplicateKeyError:
+					pass
+			except SyntaxError:
+				pass
 
-	try:
-		recipes.insert(recipeJsonObject,continue_on_error=True)
-	except pymongo.errors.DuplicateKeyError:
-		pass
-	try:
-		colors.insert(colorJsonObject,continue_on_error=True)
-	except pymongo.errors.DuplicateKeyError:
-		pass
-	print('Added to DB')
+			try:
+				colorJsonObject = ast.literal_eval(colorString.strip())
+				try:
+					colors.insert(colorJsonObject,continue_on_error=True)
+				except pymongo.errors.DuplicateKeyError:
+					pass
+			except SyntaxError:
+				pass
+			
+			print('#' + str(x) + ': Added ' + drinkName + ' to DB')
 
 
 populate()

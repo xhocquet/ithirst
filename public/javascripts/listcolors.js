@@ -8,7 +8,7 @@ function loademptycolors() {
 	$.getJSON('/drinks/getEmptyColors', function(items) {
     $.each(items, function(index, value) {
     	$("#colorlist").append(
-        value.name
+        value.name + ' '
       );
       $("#colorlist").append(
         $('<input type="text">')
@@ -27,6 +27,11 @@ function loademptycolors() {
           $.post(address);
         },
       });
+    });
+    $.getJSON('/drinks/getEmptyColorsCount', function(body) {
+      $("#colorlist").append(
+        'Remaining uncolored: ' + body.total
+      );
     });
    });
 }

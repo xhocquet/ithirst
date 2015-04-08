@@ -31,6 +31,15 @@ router.get('/getEmptyColors', function (req,res){
     });
 });
 
+router.get('/getEmptyColorsCount', function (req,res){
+    var db = req.db;
+    var body = {};
+    db.collection('colors').find({"color":"#123456"}).count({}, function(err, total) {
+        body.total = total;
+        res.json(body);
+    });
+});
+
 router.get('/getIngredients', function (req,res) {
     var db = req.db;
     db.collection('colors').find({},{_id: 0,color: 0}).toArray(function (err, items) {

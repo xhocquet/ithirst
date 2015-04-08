@@ -39,10 +39,11 @@ html ,body {
 }
 
 .link {
-	display: inline-block;
+	display: block;
 	width: 150px;
 	height: 80%;
 	text-align: center;
+	float: left;
 	vertical-align: middle;
 	font-size: 28px;
 	margin: 10px 10px 10px 0;
@@ -323,4 +324,11 @@ ul {
 .addsubmit {
 	border-radius: 3px;
 	font-size: 20px;		
+}
+
+.colorlist {
+	padding-top: 50px;
+	padding-left: 50px;
+	color: #d0d0d0;
+	font-size: 30px;
 }
