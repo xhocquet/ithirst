@@ -11,7 +11,7 @@ function loadDrinkList() {
         $('<a class="drinklistitem"></a><br />')
         .text(capitalize(value.name+''))
         .css("color", '#d0d0d0')
-        .attr("href", "/drinks/find/"+value.name)
+        .attr("href", "/drinks/find/"+value._id)
       );
     });
    });

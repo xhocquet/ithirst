@@ -13,7 +13,10 @@ unitModifers = {
   'tbsp' : 15,
   'splash' : 3,
   'drop' : 0.5,
-  'glass' : 250
+  'glass' : 250,
+  'jigger' : 45,
+  'measure' : 45,
+  'squirt' : 1
 }
 
 var colors = [];
@@ -30,13 +33,13 @@ var tempVal;
 //DOM Ready
 $(document).ready(function() {
     $("#ingredientlist").empty();
-    loadDrink(curDrink);
+    loadDrink(curDrinkId);
 });
 
 //Load page with drink ingredients/chart
 function loadDrink(drinkToGet) {
 
-    address = '/drinks/find/details/' + encodeURI(drinkToGet.toLowerCase());
+    address = '/drinks/find/details/' + curDrinkId;
 
     //Populate list with ingredients
     $.getJSON(address, function(item) {
@@ -47,6 +50,8 @@ function loadDrink(drinkToGet) {
             grad = ctx.createLinearGradient(0, 0, 0, 150)
         } else if (curGlassType == 'shooter glass' || curGlassType == 'shot glass') {
             grad = ctx.createLinearGradient(0, 70, 0, 150);
+        } else {
+            grad = ctx.createLinearGradient(0, 0, 0, 150)
         }
 
         step = grad.addColorStop.bind(grad), // function reference to simplify
@@ -56,6 +61,8 @@ function loadDrink(drinkToGet) {
             y = 150;
         } else if (curGlassType == 'shooter glass' || curGlassType == 'shot glass') {
             y = 80;
+        } else {
+            y = 150
         }
 
         document.getElementById('title').innerHTML = capitalize(item.name);
@@ -70,13 +77,15 @@ function loadDrink(drinkToGet) {
 
         $.each(ingredients, function(index, value) {
             modifier = mapUnit(value.measure);
-            tempNum = Number(value.amount)
-            if (isNaN(tempNum)) {
-                if (hasFraction = parseFrac(value.amount)) {
-                    tempNum = hasFraction
+            if (typeof(modifier) !== "undefined") {
+                tempNum = Number(value.amount)
+                if (isNaN(tempNum)) {
+                    if (hasFraction = parseFrac(value.amount)) {
+                        tempNum = hasFraction
+                    }
                 }
+                totalVal += tempNum * modifier;
             }
-            totalVal += tempNum * modifier;
             colors.push(value.name);
         });
 
@@ -90,37 +99,39 @@ function loadDrink(drinkToGet) {
             //INGREDIENT LOOP
             $.each(ingredients, function(index, value) {
                 modifier = mapUnit(value.measure);
-                //Pull the color from the array
-                curColor = "black"
-                $.each(colorInfo, function(index2, value2) {
-                    if (value.name == value2.name) {
-                        curColor = value2.color;
+                if (typeof(modifier) !== "undefined") {
+                    //Pull the color from the array
+                    curColor = "black"
+                    $.each(colorInfo, function(index2, value2) {
+                        if (value.name == value2.name) {
+                            curColor = value2.color;
+                        }
+                    });
+
+                    $("#ingredientlist").append(
+                        $('<li></li>')
+                        .text(value.amount + ' ' + value.measure + ' ' + capitalize(value.name + ''))
+                        .css("color", curColor)
+                    );
+
+                    //Steps for graph gradient
+                    //small line
+                    console.log(totalVal)
+                    step(tempVal / totalVal, "black");
+                    step(tempVal / totalVal + .01, "black");
+                    //actual alcohol stuff
+                    step(tempVal / totalVal + .01, curColor);
+
+                    tempNum = Number(value.amount)
+                    if (isNaN(tempNum)) {
+                        if (hasFraction = parseFrac(value.amount)) {
+                            tempNum = hasFraction
+                        }
                     }
-                });
 
-                $("#ingredientlist").append(
-                    $('<li></li>')
-                    .text(value.amount + ' ' + value.measure + ' ' + capitalize(value.name + ''))
-                    .css("color", curColor)
-                );
-
-                //Steps for graph gradient
-                //small line
-                step(tempVal / totalVal, "black");
-                step(tempVal / totalVal + .01, "black");
-                //actual alcohol stuff
-                step(tempVal / totalVal + .01, curColor);
-
-                tempNum = Number(value.amount)
-                if (isNaN(tempNum)) {
-                    if (hasFraction = parseFrac(value.amount)) {
-                        tempNum = hasFraction
-                    }
+                    tempVal += tempNum * modifier;
+                    step(tempVal / totalVal, curColor);
                 }
-
-                tempVal += tempNum * modifier;
-
-                step(tempVal / totalVal, curColor)
 
             });
             ///INGREDIENT LOOP END
@@ -137,6 +148,11 @@ function loadDrink(drinkToGet) {
                 ctx.lineTo(75, 150);
                 ctx.lineTo(140, 150);
                 ctx.lineTo(140, 70);
+            } else {
+                ctx.moveTo(75, 0);
+                ctx.lineTo(75, 150);
+                ctx.lineTo(200, 150);
+                ctx.lineTo(200, 0);
             }
 
             (function loop() {
@@ -152,6 +168,8 @@ function loadDrink(drinkToGet) {
                     ctx.fillRect(0, y, 300, 150 - y);
                 } else if (curGlassType == 'shooter glass' || curGlassType == 'shot glass') {
                     ctx.fillRect(0, y, 300, 150 - y);
+                } else {
+                    ctx.fillRect(0, y, 300, 150 - y);
                 }
 
                 // now that we have the shape we want, just replace it with the gradient:
@@ -162,6 +180,8 @@ function loadDrink(drinkToGet) {
                     ctx.fillRect(0, 0, 300, 150);
                 } else if (curGlassType == 'shooter glass' || curGlassType == 'shot glass') {
                     ctx.fillRect(0, 70, 300, 150);
+                } else {
+                    ctx.fillRect(0, 0, 300, 150);
                 }
 
                 ctx.globalCompositeOperation = "source-over";
@@ -176,6 +196,11 @@ function loadDrink(drinkToGet) {
                     ctx.lineTo(75, 150);
                     ctx.lineTo(140, 150);
                     ctx.lineTo(140, 70);
+                } else {
+                    ctx.moveTo(75, 0);
+                    ctx.lineTo(75, 150);
+                    ctx.lineTo(200, 150);
+                    ctx.lineTo(200, 0);
                 }
                 ctx.lineWidth = 3;
                 ctx.strokeStyle = '#bfbfbf';

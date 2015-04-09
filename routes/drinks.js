@@ -1,15 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/find/:name', function (req,res){
-    var drinkName = decodeURI(req.params.name);
-    res.render('drink', {name: drinkName});
+router.get('/find/:id', function (req,res){
+    res.render('drink', {id: req.params.id});
 });
 
-router.get('/find/details/:name', function (req,res){
+router.get('/find/details/:id', function (req,res){
     var db = req.db;
-    nameToSearch = decodeURI(req.params.name);
-    db.collection('recipes').findOne({"name": nameToSearch}, function (err, result) {
+    db.collection('recipes').findById(req.params.id, function (err, result) {
         res.send(result);
     });
 });
@@ -50,7 +48,7 @@ router.get('/getIngredients', function (req,res) {
 /*GET array of drinks*/
 router.get('/getDrinkNames', function (req,res){
     var db = req.db;
-    db.collection('recipes').find({},{_id: 0, ingredients: 0, directions: 0, garnish: 0}).sort({name: 1}).toArray(function(err, items) {
+    db.collection('recipes').find({},{ingredients: 0, directions: 0, garnish: 0, upvotes: 0, downvotes: 0, glass: 0, type: 0}).sort({name: 1}).toArray(function(err, items) {
     	res.json(items);
     });
 });
@@ -58,7 +56,7 @@ router.get('/getDrinkNames', function (req,res){
 router.get('/getDrinksByIngredients/:ingredients', function(req, res){
     var ingredientArray = req.params.ingredients.split(",");
     var db = req.db;
-    db.collection('recipes').find({"ingredients.name": {$in: ingredientArray }}).toArray(function(err, items){
+    db.collection('recipes').find({"ingredients.name": {$in: ingredientArray }}).limit(50).toArray(function(err, items){
         res.json(items);
     });
 });
