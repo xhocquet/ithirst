@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
+from urllib.parse import quote
 import pymongo
 import ast
 import re
@@ -14,9 +15,9 @@ def cutit(s,n):
    return s[n:]
 
 def populate():
-	for x in range(6000,8000):
+	# 4950 Highest drink #
+	for x in range(1, 4950):
 		recipeString = '['
-		colorString = '['
 
 		request = requests.get("http://www.barmeister.com/drinks/recipe/"+str(x)+"/")
 		soup = BeautifulSoup(request.text)
@@ -45,11 +46,7 @@ def populate():
 			for row in rows:
 				cells = row.findChildren('td')
 				recipeString += '{"name":"'
-				recipeString += str(cells[1].text).lower().strip()
-
-				colorString += '{"name":"'
-				colorString += str(cells[1].text).lower().strip()
-				colorString += '","color":"#123456"},'
+				recipeString += ' '.join(str(cells[1].text).split())
 
 				recipeString += '","amount":"'
 
@@ -81,7 +78,6 @@ def populate():
 			recipeString += '","upvotes":0,"downvotes":0},'
 
 			recipeString += ']'
-			colorString += ']'
 
 			try:
 				recipeJsonObject = ast.literal_eval(recipeString.strip())
@@ -91,17 +87,23 @@ def populate():
 					pass
 			except SyntaxError:
 				pass
-
-			try:
-				colorJsonObject = ast.literal_eval(colorString.strip())
-				try:
-					colors.insert(colorJsonObject,continue_on_error=True)
-				except pymongo.errors.DuplicateKeyError:
-					pass
-			except SyntaxError:
-				pass
 			
 			print('#' + str(x) + ': Added ' + drinkName + ' to DB')
 
+def populateColors():
+	ingredientList = []
 
-populate()
+	ingredientsShit = list(recipes.distinct("ingredients.name"))
+	ingredientsShit.sort()
+
+	f = open('ingredients', 'w')
+	
+	for x in ingredientsShit:
+		f.write(x+'\n')
+
+				# colorString += '{"name":"'
+				# colorString += str(cells[1].text).lower().strip()
+				# colorString += '","color":"#123456"},'
+
+#populate()
+populateColors()
